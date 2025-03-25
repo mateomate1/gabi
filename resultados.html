@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resultados de Gonzalo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-6">
+    <div class="max-w-3xl mx-auto bg-white p-6 rounded-lg shadow-lg">
+        <h1 class="text-2xl font-bold text-center mb-4">Resultados de Gonzalo</h1>
+        <p class="text-sm text-gray-600 mb-4">Aquí puedes ver y editar los registros de Gonzalo para su análisis.</p>
+
+        <table class="w-full border-collapse border border-gray-300">
+            <thead>
+                <tr class="bg-gray-200">
+                    <th class="border border-gray-300 p-2">Fecha</th>
+                    <th class="border border-gray-300 p-2">Atracón</th>
+                    <th class="border border-gray-300 p-2">Actividad Física</th>
+                    <th class="border border-gray-300 p-2">Glucosa</th>
+                    <th class="border border-gray-300 p-2">Estado Emocional</th>
+                    <th class="border border-gray-300 p-2">Editar</th>
+                </tr>
+            </thead>
+            <tbody id="resultadosBody">
+                <!-- Aquí se cargarán los registros dinámicamente -->
+            </tbody>
+        </table>
+
+        <div id="formularioEdicion" class="hidden mt-6">
+            <h2 class="text-lg font-bold">Editar Registro</h2>
+            <form id="editarRegistroForm" class="space-y-4">
+                <input type="hidden" id="registroId">
+                <label class="block font-semibold">Fecha</label>
+                <input type="date" id="fecha" class="w-full p-2 border rounded">
+                <label class="block font-semibold">Atracón</label>
+                <input type="text" id="atracon" class="w-full p-2 border rounded">
+                <label class="block font-semibold">Actividad Física</label>
+                <input type="text" id="actividad" class="w-full p-2 border rounded">
+                <label class="block font-semibold">Glucosa</label>
+                <input type="number" id="glucosa" class="w-full p-2 border rounded">
+                <label class="block font-semibold">Estado Emocional</label>
+                <input type="text" id="estadoEmocional" class="w-full p-2 border rounded">
+                <button type="submit" class="w-full bg-green-500 text-white p-2 rounded hover:bg-green-600">Guardar Cambios</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function obtenerRegistros() {
+            return JSON.parse(localStorage.getItem("registrosGonzalo")) || [];
+        }
+
+        function cargarRegistros() {
+            const tbody = document.getElementById("resultadosBody");
+            tbody.innerHTML = "";
+            const registros = obtenerRegistros();
+            registros.forEach((registro, index) => {
+                const fila = `<tr class='border border-gray-300'>
+                    <td class='border p-2'>${registro.fecha}</td>
+                    <td class='border p-2'>${registro.atracon}</td>
+                    <td class='border p-2'>${registro.actividad}</td>
+                    <td class='border p-2'>${registro.glucosa}</td>
+                    <td class='border p-2'>${registro.estadoEmocional}</td>
+                    <td class='border p-2'><button class='bg-blue-500 text-white px-2 py-1 rounded' onclick='editarRegistro(${index})'>Editar</button></td>
+                </tr>`;
+                tbody.innerHTML += fila;
+            });
+        }
+
+        function editarRegistro(index) {
+            const registros = obtenerRegistros();
+            const registro = registros[index];
+            document.getElementById("registroId").value = index;
+            document.getElementById("fecha").value = registro.fecha;
+            document.getElementById("atracon").value = registro.atracon;
+            document.getElementById("actividad").value = registro.actividad;
+            document.getElementById("glucosa").value = registro.glucosa;
+            document.getElementById("estadoEmocional").value = registro.estadoEmocional;
+            document.getElementById("formularioEdicion").classList.remove("hidden");
+        }
+
+        document.getElementById("editarRegistroForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            const index = parseInt(document.getElementById("registroId").value);
+            const registros = obtenerRegistros();
+            registros[index] = {
+                fecha: document.getElementById("fecha").value,
+                atracon: document.getElementById("atracon").value,
+                actividad: document.getElementById("actividad").value,
+                glucosa: document.getElementById("glucosa").value,
+                estadoEmocional: document.getElementById("estadoEmocional").value
+            };
+            localStorage.setItem("registrosGonzalo", JSON.stringify(registros));
+            document.getElementById("formularioEdicion").classList.add("hidden");
+            cargarRegistros();
+        });
+        
+        window.addEventListener("load", cargarRegistros);
+    </script>
+</body>
+</html>
