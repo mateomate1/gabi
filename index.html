@@ -99,9 +99,17 @@
             // Obtener los valores del formulario
             const nuevoRegistro = {
                 fecha: new Date().toISOString().split('T')[0], // Fecha actual
-                atracon: document.getElementById('frecuenciaAtracon').value,
+                atracon: document.getElementById('atracon').value,
+                frecuenciaAtracon: document.getElementById('frecuenciaAtracon').value,
+                duracionAtracon: document.getElementById('duracionAtracon').value,
+                emociones: document.getElementById('emociones').value,
+                tipoAlimentos: document.getElementById('tipoAlimentos').value,
+                hambre: document.getElementById('hambre').value,
                 actividad: document.getElementById('actividad').value,
+                duracionActividad: document.getElementById('duracionActividad').value,
                 glucosa: document.getElementById('glucosa').value,
+                momentoGlucosa: document.getElementById('momentoGlucosa').value,
+                emocionGlucosa: document.getElementById('emocionGlucosa').value,
                 estadoEmocional: document.getElementById('estadoEmocional').value
             };
     
@@ -114,10 +122,10 @@
             // Guardar en localStorage
             localStorage.setItem("registrosGonzalo", JSON.stringify(registros));
     
-            // Abrir la otra página en una nueva pestaña
-            window.open("resultados.html", "_blank");
+            // Redirigir a resultados.html
+            window.location.href = "resultados.html";
         });
-    </script>    
+    </script>     
     
 </body>
 </html>
